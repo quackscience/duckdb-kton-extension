@@ -1,0 +1,22 @@
+# name: test/sql/kton.test
+# description: Test kton extension
+# group: [kton]
+
+# Before we load the extension, this will fail
+statement error
+SELECT read_kton('example.kton')
+----
+Catalog Error: Scalar Function with name read_kton does not exist!
+
+# Require statement will ensure this test is run with this extension loaded
+require kton
+
+# Enable query verification
+statement ok
+PRAGMA enable_verification
+
+# Confirm the extension works
+query I
+SELECT filing_id FROM read_kton('test/data/test.kton') LIMIT 1
+----
+2312098E5243985673
